@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 import ScheduleView from './components/ScheduleView.vue'
+import { FwbButton } from 'flowbite-vue'
+
 
 type DayItem = { isActive: boolean, slots: Slot[] }
 type Slot = { start: string, end: string }
@@ -145,41 +147,54 @@ function updateSlotEnd(dayItem: DayItem, index: number) {
 </script>
 
 <template>
-  <div>Visit Duration</div>
-  <select name="visit-duration" id="visit-duration" v-model="selectedDuration" @change="resetAllSlot()">
-    <option v-for="duration in durations" :key="duration" :value="duration">{{ duration }} min</option>
-  </select>
-  <input type="checkbox" name="video-call-availability" id="video-call-availability" v-model="videoCallAvailability"/>
-  <label for="video-call-availability">Allow video tour call</label>
-  <div>Number of Booking / Session</div>
-  <input type="number" name="number-of-booking-per-session" id="number-of-booking-per-session" v-model="numberOfBookingPerSession"/>
-
-  <div>
-    <button @click="viewCalendar = !viewCalendar">View Calendar</button>
-    <div>Availability</div>
-    <div>Set your weekly recurring schedule</div>
-
-    <div v-for="(item, key) in bookData" :key="key">
-      <input type="checkbox" name="`is-${day}-active`" :id="`is-${key}-active`" v-model="item.isActive" @change="handleDaySelect(item)"/>
-      <div class="text-bold">{{ key }}</div>
-      <div v-if="!item.isActive">
-        Unavailable
+  <div class="container mx-auto flex">
+    <div class="flex-auto">
+      <div class="mb-4">
+        <div>Visit Duration</div>
+        <select name="visit-duration" id="visit-duration" v-model="selectedDuration" @change="resetAllSlot()">
+          <option v-for="duration in durations" :key="duration" :value="duration">{{ duration }} min</option>
+        </select>
       </div>
-      <div v-else>
-        <div v-for="(slot, index) in item.slots" :key="index">
-          <div>
-            <select v-model="slot.start" @change="updateSlotEnd(item, index)">
-              <option v-for="slotHour in slotHours" :key="slotHour" :value="slotHour">{{ slotHour }}</option>
-            </select>
-            - {{ slot.end }}
+      <div class="mb-4">
+        <div>Number of Booking / Session</div>
+        <input type="number" name="number-of-booking-per-session" id="number-of-booking-per-session" v-model="numberOfBookingPerSession"/>
+      </div>
+      <input type="checkbox" name="video-call-availability" id="video-call-availability" v-model="videoCallAvailability"/>
+      <label for="video-call-availability">Allow video tour call</label>
+  
+      <div>
+        <FwbButton color="default" @click="viewCalendar = !viewCalendar">View Calendar</FwbButton>
+        <div>Availability</div>
+        <div>Set your weekly recurring schedule</div>
+  
+        <div v-for="(item, key) in bookData" :key="key">
+          <input type="checkbox" name="`is-${day}-active`" :id="`is-${key}-active`" v-model="item.isActive" @change="handleDaySelect(item)"/>
+          <div class="text-bold">{{ key }}</div>
+          <div v-if="!item.isActive">
+            Unavailable
           </div>
-          <button @click="addSlotAfterIndex(item, index)">Add</button>
-          <button @click="removeSlot(item, index)">Remove</button>
+          <div v-else>
+            <div v-for="(slot, index) in item.slots" :key="index">
+              <div>
+                <select v-model="slot.start" @change="updateSlotEnd(item, index)">
+                  <option v-for="slotHour in slotHours" :key="slotHour" :value="slotHour">{{ slotHour }}</option>
+                </select>
+                -
+                <select disabled>
+                  <option :value="slot.end">{{ slot.end }}</option>
+                </select>
+              </div>
+              <FwbButton @click="addSlotAfterIndex(item, index)">Add</FwbButton>
+              <FwbButton @click="removeSlot(item, index)">Remove</FwbButton>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="flex-auto">
+      <ScheduleView v-if="viewCalendar" :duration="selectedDuration" :book-data="bookData" :video-call-availability="videoCallAvailability" :number-of-booking-per-session="numberOfBookingPerSession"/>
+    </div>
   </div>
-  <ScheduleView v-if="viewCalendar" :duration="selectedDuration" :book-data="bookData" :video-call-availability="videoCallAvailability" :number-of-booking-per-session="numberOfBookingPerSession"/>
 </template>
 
 <style scoped>

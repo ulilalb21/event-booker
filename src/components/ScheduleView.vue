@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import type { CalendarOptions } from '@fullcalendar/core';
 import TimeGridPlugin from '@fullcalendar/timegrid'
 import type { BookData } from '../App.vue';
+import { watch } from 'vue'
 
 const props = defineProps({
   bookData: {
@@ -34,6 +35,7 @@ const calendarOptions: CalendarOptions = {
     minute: '2-digit',
   },
   plugins: [TimeGridPlugin],
+
 }
 </script>
 <template>

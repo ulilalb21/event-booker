@@ -18,6 +18,8 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
+    "flowbite": "^2.4.1",
+    "flowbite-vue": "^0.1.5",
     "vue": "^3.4.29"
   },
   "devDependencies": {

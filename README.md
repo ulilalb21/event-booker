@@ -1,11 +1,5 @@
 # event-booker
 
-## TODO
-
-- [ ] Setup Project
-- [ ] Scaffold UI with dummy data
-- [ ] Unit Test
-
 ## Project Setup
 
 ```sh

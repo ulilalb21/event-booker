@@ -1,7 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  content: [],
+  content: [
+    "./node_modules/flowbite/**/*.js"
+  ],
   theme: { 
     extend: { 
       fontFamily: { 
@@ -9,6 +11,10 @@ export default {
       } 
     }, 
   },
-  plugins: [],
+  plugins: [
+    // eslint-disable-next-line no-undef
+    require('flowbite/plugin')
+  ]
+,
 }
 
