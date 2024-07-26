@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
+import ScheduleView from './components/ScheduleView.vue'
 
 type DayItem = { isActive: boolean, slots: Slot[] }
 type Slot = { start: string, end: string }
-type BookData = Ref<Record<string, DayItem>>
+export type BookData = Ref<Record<string, DayItem>>
 
 const durations = [15, 30, 45, 60, 90]
 const selectedDuration = ref(durations[0])
 const videoCallAvailability = ref(false)
 const numberOfBookingPerSession = ref(1)
+const viewCalendar = ref(false)
 
 const bookData: BookData = ref({
   mon: {
@@ -98,7 +100,6 @@ const slotHours = [
 ]
 function handleDaySelect(dayItem: DayItem) {
   if (dayItem.isActive && !dayItem.slots.length) {
-    console.log('anuu')
     dayItem.slots.push({
       start: '09:00',
       end: calculateEndSlot('09:00', selectedDuration.value),
@@ -154,6 +155,7 @@ function updateSlotEnd(dayItem: DayItem, index: number) {
   <input type="number" name="number-of-booking-per-session" id="number-of-booking-per-session" v-model="numberOfBookingPerSession"/>
 
   <div>
+    <button @click="viewCalendar = !viewCalendar">View Calendar</button>
     <div>Availability</div>
     <div>Set your weekly recurring schedule</div>
 
@@ -176,8 +178,8 @@ function updateSlotEnd(dayItem: DayItem, index: number) {
         </div>
       </div>
     </div>
-
   </div>
+  <ScheduleView v-if="viewCalendar" :duration="selectedDuration" :book-data="bookData" :video-call-availability="videoCallAvailability" :number-of-booking-per-session="numberOfBookingPerSession"/>
 </template>
 
 <style scoped>
